@@ -155,7 +155,6 @@ model_provider = "dashscope_http"
 [model_providers.dashscope_http]
 name = "DashScope HTTP"
 base_url = "http://<host>:<端口>/v1"
-env_key = "DASHSCOPE_API_KEY"
 wire_api = "responses"
 supports_websockets = false
 ```
