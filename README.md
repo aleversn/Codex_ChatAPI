@@ -6,6 +6,8 @@ It accepts `Responses API` style requests, forwards them to an upstream `chat/co
 
 [中文教程](./docs/README.zh-CN.md)
 
+License: Apache-2.0. See [LICENSE](/home/lpc/repos/Codex_ChatAPI/LICENSE).
+
 ## Features
 
 - Provides `/health`, `/v1/models`, and `/v1/responses`
@@ -105,6 +107,12 @@ Fields:
 - `providers.<name>.timeout`: request timeout in seconds
 - `providers.<name>.base_urls`: one or more upstream base URLs
 
+Important:
+
+- Configure each upstream `base_url` as the provider's API root ending at `/v1`
+- Do not set it to `/v1/responses`, because `/v1/responses` is this proxy service's own endpoint
+- Example: use `https://api.deepseek.com` or `https://openrouter.ai/api`, and the proxy will normalize them to the upstream `/v1` path
+
 ## Start
 
 ### Option 1: start script (recommended)
@@ -202,3 +210,4 @@ Request priority:
 
 - The upstream service must support OpenAI-style `/v1/chat/completions` and `/v1/models`
 - If a provider defines multiple `base_urls`, the service rotates them per request
+- Client requests should call this project at `/v1/responses`, while configured upstream `base_urls` should point to the provider API root for `/v1`

@@ -6,6 +6,8 @@
 
 [English](../README.md)。
 
+许可证：Apache-2.0。见 [LICENSE](/home/lpc/repos/Codex_ChatAPI/LICENSE)。
+
 ## 功能
 
 - 提供独立接口：`/health`、`/v1/models`、`/v1/responses`
@@ -105,6 +107,12 @@ providers:
 - `providers.<name>.model`：该服务商默认模型
 - `providers.<name>.timeout`：请求超时秒数
 - `providers.<name>.base_urls`：上游地址列表，可配置多个
+
+注意：
+
+- `base_urls` 配置的是上游服务商 API 根地址，对应的是 `/v1`
+- 不要把它写成 `/v1/responses`，因为 `/v1/responses` 是当前这个代理服务自己暴露的接口
+- 例如可填写 `https://api.deepseek.com` 或 `https://openrouter.ai/api`，程序会自动规范到上游 `/v1` 路径
 
 ## 启动
 
@@ -207,3 +215,4 @@ curl -N http://127.0.0.1:8000/v1/responses \
 
 - 上游接口需兼容 OpenAI 风格的 `/v1/chat/completions` 和 `/v1/models`
 - 如果某个服务商配置了多个 `base_urls`，服务会按请求轮询使用
+- 客户端请求本项目时使用的是 `/v1/responses`，而配置里的上游 `base_urls` 应该指向服务商的 `/v1` API 根路径
