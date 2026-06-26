@@ -6,7 +6,7 @@
 
 [English](../README.md)。
 
-许可证：Apache-2.0。见 [LICENSE](/home/lpc/repos/Codex_ChatAPI/LICENSE)。
+许可证：Apache-2.0。见 [LICENSE](../LICENSE)。
 
 ## 功能
 
@@ -41,7 +41,6 @@ Codex_ChatAPI/
 ## 安装
 
 ```bash
-cd /home/lpc/repos/Codex_ChatAPI
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
@@ -52,7 +51,6 @@ pip install -r requirements.txt
 推荐流程是先用示例文件初始化本地配置，再通过启动脚本启动服务：
 
 ```bash
-cd /home/lpc/repos/Codex_ChatAPI
 bash scripts/init_config.sh
 bash scripts/start.sh deepseek 8000
 ```
@@ -64,7 +62,6 @@ bash scripts/start.sh deepseek 8000
 首次使用时，先把 `examples` 里的示例配置复制到 `config`：
 
 ```bash
-cd /home/lpc/repos/Codex_ChatAPI
 bash scripts/init_config.sh
 ```
 
@@ -119,7 +116,6 @@ providers:
 ### 方式 1：使用启动脚本（推荐）
 
 ```bash
-cd /home/lpc/repos/Codex_ChatAPI
 bash scripts/start.sh deepseek 8000
 ```
 
@@ -137,7 +133,6 @@ CODEX_PROVIDER=openrouter PORT=8010 bash scripts/start.sh
 ### 方式 2：直接用 uvicorn
 
 ```bash
-cd /home/lpc/repos/Codex_ChatAPI
 uvicorn app.main:app --host 0.0.0.0 --port 8000
 ```
 

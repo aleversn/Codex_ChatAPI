@@ -6,7 +6,7 @@ It accepts `Responses API` style requests, forwards them to an upstream `chat/co
 
 [中文教程](./docs/README.zh-CN.md)
 
-License: Apache-2.0. See [LICENSE](/home/lpc/repos/Codex_ChatAPI/LICENSE).
+License: Apache-2.0. See [LICENSE](./LICENSE).
 
 ## Features
 
@@ -40,7 +40,6 @@ Codex_ChatAPI/
 ## Install
 
 ```bash
-cd /home/lpc/repos/Codex_ChatAPI
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
@@ -51,7 +50,6 @@ pip install -r requirements.txt
 The recommended way is to initialize the local config from the example file, then start the service with the helper script:
 
 ```bash
-cd /home/lpc/repos/Codex_ChatAPI
 bash scripts/init_config.sh
 bash scripts/start.sh deepseek 8000
 ```
@@ -63,7 +61,6 @@ This is the preferred flow because it keeps `config/providers.yaml` local, uses 
 On first setup, copy the example config into `config/`:
 
 ```bash
-cd /home/lpc/repos/Codex_ChatAPI
 bash scripts/init_config.sh
 ```
 
@@ -118,7 +115,6 @@ Important:
 ### Option 1: start script (recommended)
 
 ```bash
-cd /home/lpc/repos/Codex_ChatAPI
 bash scripts/start.sh deepseek 8000
 ```
 
@@ -136,7 +132,6 @@ CODEX_PROVIDER=openrouter PORT=8010 bash scripts/start.sh
 ### Option 2: uvicorn directly
 
 ```bash
-cd /home/lpc/repos/Codex_ChatAPI
 uvicorn app.main:app --host 0.0.0.0 --port 8000
 ```
 
