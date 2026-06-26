@@ -1,0 +1,24 @@
+default_provider: deepseek
+
+providers:
+  deepseek:
+    api_key: ""
+    model: "deepseek-chat"
+    timeout: 300
+    base_urls:
+      - "https://api.deepseek.com"
+
+  openrouter:
+    api_key: ""
+    model: "openai/gpt-4.1"
+    timeout: 300
+    base_urls:
+      - "https://openrouter.ai/api"
+
+  custom_vendor:
+    api_key: ""
+    model: ""
+    timeout: 300
+    base_urls:
+      - "https://your-first-upstream.example.com"
+      - "https://your-second-upstream.example.com"
