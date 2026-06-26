@@ -4,7 +4,7 @@
 
 它会接收 `Responses API` 风格请求，转发到上游 `chat/completions` 接口，再把响应转换回 `Responses API` 风格，方便本地统一代理 Codex/OpenAI 兼容服务。
 
-[English](./README.md)。
+[English](../README.md)。
 
 ## 功能
 
