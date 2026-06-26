@@ -3,7 +3,7 @@ default_provider: deepseek
 providers:
   deepseek:
     api_key: ""
-    model: "deepseek-chat"
+    model: "deepseek-v4-flash"
     timeout: 300
     base_urls:
       - "https://api.deepseek.com"

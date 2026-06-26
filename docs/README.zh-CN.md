@@ -142,6 +142,41 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000
 CODEX_CONFIG_PATH=/path/to/providers.yaml uvicorn app.main:app --host 0.0.0.0 --port 8000
 ```
 
+## 在 Codex 中使用
+
+当本项目启动后，如果你希望让 Codex 通过这个代理访问模型，可以在 Codex 的 `config.toml` 中这样配置。
+
+以 `deepseek-v4-flash` 为例：
+
+```toml
+model = "deepseek-v4-flash"
+model_provider = "dashscope_http"
+
+[model_providers.dashscope_http]
+name = "DashScope HTTP"
+base_url = "http://<host>:<端口>/v1"
+env_key = "DASHSCOPE_API_KEY"
+wire_api = "responses"
+supports_websockets = false
+```
+
+说明：
+
+- `base_url` 需要指向本项目暴露出的服务地址，例如 `http://127.0.0.1:8000/v1`
+- `wire_api = "responses"` 表示让 Codex 按 `Responses API` 方式请求当前代理
+
+### 自定义 `CODEX_HOME`
+
+默认情况下，Codex 的 `CODEX_HOME` 一般位于用户主目录 `~` 下。
+
+如果你想自定义 `CODEX_HOME`，可以先设置环境变量，再启动 Codex：
+
+```bash
+export CODEX_HOME=<自定义目录>/.codex_home
+```
+
+然后再启动 Codex 即可。
+
 ## 接口
 
 ### 健康检查

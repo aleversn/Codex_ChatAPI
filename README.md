@@ -141,6 +141,41 @@ To use another config file:
 CODEX_CONFIG_PATH=/path/to/providers.yaml uvicorn app.main:app --host 0.0.0.0 --port 8000
 ```
 
+## Use With Codex
+
+After this service is running, you can point Codex at it through `config.toml`.
+
+Example for `deepseek-v4-flash`:
+
+```toml
+model = "deepseek-v4-flash"
+model_provider = "dashscope_http"
+
+[model_providers.dashscope_http]
+name = "DashScope HTTP"
+base_url = "http://<host>:<port>/v1"
+env_key = "DASHSCOPE_API_KEY"
+wire_api = "responses"
+supports_websockets = false
+```
+
+Notes:
+
+- `base_url` should point to this proxy service, for example `http://127.0.0.1:8000/v1`
+- `wire_api = "responses"` tells Codex to use the `Responses API` against this proxy
+
+### Custom `CODEX_HOME`
+
+By default, Codex usually keeps `CODEX_HOME` under the user's home directory (`~`).
+
+If you want to customize it, set the environment variable before starting Codex:
+
+```bash
+export CODEX_HOME=<custom-dir>/.codex_home
+```
+
+Then start Codex normally.
+
 ## API
 
 ### Health check
