@@ -1,8 +1,10 @@
 # Codex_ChatAPI
 
-一个独立的 FastAPI 转发服务，用来把 `Responses API` 风格请求转发到上游 `chat/completions` 接口，并把响应再转换回 `Responses API` 风格，方便本地统一代理 Codex/OpenAI 兼容服务。
+一个独立的 FastAPI 转发服务，重点是把像 DeepSeek 这类主要提供 `Chat API` 的上游，适配成可供 OpenAI `Responses API` 使用的接口。
 
-默认英文文档见根目录 [README.md](/home/lpc/repos/Codex_ChatAPI/README.md)。
+它会接收 `Responses API` 风格请求，转发到上游 `chat/completions` 接口，再把响应转换回 `Responses API` 风格，方便本地统一代理 Codex/OpenAI 兼容服务。
+
+[English](./README.md)。
 
 ## 功能
 
@@ -42,6 +44,18 @@ python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 ```
+
+## 快速开始
+
+推荐流程是先用示例文件初始化本地配置，再通过启动脚本启动服务：
+
+```bash
+cd /home/lpc/repos/Codex_ChatAPI
+bash scripts/init_config.sh
+bash scripts/start.sh deepseek 8000
+```
+
+之所以推荐这种方式，是因为它会把 `examples/` 下的模板复制为本地 `config/providers.yaml`，同时在启动时显式指定默认 provider，更适合作为日常使用方式。
 
 ## 初始化配置
 
@@ -94,7 +108,7 @@ providers:
 
 ## 启动
 
-### 方式 2：使用启动脚本（推荐）
+### 方式 1：使用启动脚本（推荐）
 
 ```bash
 cd /home/lpc/repos/Codex_ChatAPI
@@ -112,7 +126,7 @@ bash scripts/start.sh deepseek 8000
 CODEX_PROVIDER=openrouter PORT=8010 bash scripts/start.sh
 ```
 
-### 方式 1：直接用 uvicorn
+### 方式 2：直接用 uvicorn
 
 ```bash
 cd /home/lpc/repos/Codex_ChatAPI
@@ -159,6 +173,25 @@ curl http://127.0.0.1:8000/v1/responses \
     "stream": false
   }'
 ```
+
+如果是流式返回，把 `"stream"` 设为 `true`。代理会请求上游的 Chat Completions 流式接口，再重新包装成 `Responses API` 风格的 SSE 事件输出，例如 `response.created`、`response.output_text.delta`、`response.output_text.done`、`response.completed`。
+
+```bash
+curl -N http://127.0.0.1:8000/v1/responses \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "input": "写一个简短的 Python hello world 示例",
+    "stream": true
+  }'
+```
+
+在流式模式下：
+
+- 返回类型是 `text/event-stream`
+- 文本内容会通过 `Responses API` 风格的 SSE 事件逐步输出
+- 流结束时会先返回 `response.completed`，最后再输出 `data: [DONE]`
 
 请求体新增字段：
 

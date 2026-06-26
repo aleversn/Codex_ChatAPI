@@ -1,8 +1,10 @@
 # Codex_ChatAPI
 
-Standalone FastAPI proxy service that accepts `Responses API` style requests, forwards them to an upstream `chat/completions` API, and converts the result back into `Responses API` style responses.
+Standalone FastAPI proxy service that makes Chat Completions style providers such as DeepSeek usable through the OpenAI `Responses API`.
 
-Chinese documentation: [docs/README.zh-CN.md](/home/lpc/repos/Codex_ChatAPI/docs/README.zh-CN.md)
+It accepts `Responses API` style requests, forwards them to an upstream `chat/completions` API, and converts the result back into `Responses API` style responses. The main goal of this project is to let services that only expose Chat API semantics behave like a Responses API endpoint for local Codex/OpenAI-compatible workflows.
+
+[中文教程](./docs/README.zh-CN.md)
 
 ## Features
 
@@ -41,6 +43,18 @@ python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 ```
+
+## Quick Start
+
+The recommended way is to initialize the local config from the example file, then start the service with the helper script:
+
+```bash
+cd /home/lpc/repos/Codex_ChatAPI
+bash scripts/init_config.sh
+bash scripts/start.sh deepseek 8000
+```
+
+This is the preferred flow because it keeps `config/providers.yaml` local, uses the example template under `examples/`, and makes provider selection explicit at startup.
 
 ## Initialize Config
 
@@ -93,7 +107,7 @@ Fields:
 
 ## Start
 
-### Preferred: start script
+### Option 1: start script (recommended)
 
 ```bash
 cd /home/lpc/repos/Codex_ChatAPI
@@ -111,7 +125,7 @@ Environment variables also work:
 CODEX_PROVIDER=openrouter PORT=8010 bash scripts/start.sh
 ```
 
-### Alternative: uvicorn directly
+### Option 2: uvicorn directly
 
 ```bash
 cd /home/lpc/repos/Codex_ChatAPI
@@ -158,6 +172,25 @@ curl http://127.0.0.1:8000/v1/responses \
     "stream": false
   }'
 ```
+
+For streaming responses, set `"stream": true`. The proxy will call the upstream Chat Completions stream and re-emit it as `Responses API` style SSE events such as `response.created`, `response.output_text.delta`, `response.output_text.done`, and `response.completed`.
+
+```bash
+curl -N http://127.0.0.1:8000/v1/responses \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "input": "Write a short hello world program in Python",
+    "stream": true
+  }'
+```
+
+In streaming mode:
+
+- The response uses `text/event-stream`
+- Text is emitted incrementally through `Responses API` style SSE events
+- The stream ends with `response.completed`, followed by `data: [DONE]`
 
 Request priority:
 
